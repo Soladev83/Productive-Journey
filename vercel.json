@@ -1,21 +1,6 @@
 {
-    "version": 2,
-    "buildCommand": "cd frontend && npm install && npm run build",
-    "outputDirectory": "frontend/dist",
-    "builds": [
-        {
-            "src": "backend/index.js",
-            "use": "@vercel/node"
-        }
-    ],
-    "routes": [
-        {
-            "src": "/api/(.*)",
-            "dest": "backend/index.js"
-        },
-        {
-            "src": "/(.*)",
-            "dest": "/frontend/dist/index.html"
-        }
-    ]
+    "buildCommand": "npm run build",
+    "installCommand": "npm install",
+    "framework": "vite",
+    "outputDirectory": "built"
 }
