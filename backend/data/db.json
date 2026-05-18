@@ -1,0 +1,44 @@
+{
+  "daylogs": [
+    {
+      "_id": "5ctsha0",
+      "createdAt": "2026-05-18T15:59:47.986Z",
+      "updatedAt": "2026-05-18T16:01:56.144Z",
+      "date": "2026-05-18",
+      "tasks": [
+        {
+          "id": "1779119987836",
+          "text": "Plan MERN application goals",
+          "completed": true
+        },
+        {
+          "id": "1779120010456",
+          "text": "Build Express backend server",
+          "completed": true
+        },
+        {
+          "id": "1779120027468",
+          "text": "Design glassmorphic CSS frontend",
+          "completed": false
+        }
+      ],
+      "productivityPercent": 67,
+      "journal": {
+        "text": "Completed major development steps today. The custom dual-mode database worked flawlessly!",
+        "learned": "Learned how to construct custom SVG charts and implement elegant Mongoose/JSON wrappers."
+      }
+    }
+  ],
+  "plans": [
+    {
+      "_id": "wwvcdka",
+      "createdAt": "2026-05-18T16:03:38.663Z",
+      "updatedAt": "2026-05-18T16:03:38.663Z",
+      "date": "2026-05-19",
+      "title": "Database tuning session",
+      "notes": "Check performance on local storage compared to MongoDB connection",
+      "category": "learning",
+      "completed": false
+    }
+  ]
+}
