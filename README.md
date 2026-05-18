@@ -10,25 +10,7 @@ Designed with an aesthetic, glowing **glassmorphic dark theme** (custom HSL toke
 
 Here is the premium user interface displaying your daily reflection log and sidebar tabs in action:
 
-```
-+-----------------------------------------------------------------------------+
-|  🌌 Journey        |  Good Evening, Dawit!                                   |
-|  ----------------- |  Organize today's list, check your scores, and journal  |
-|  [D] Dashboard     |                                                         |
-|  [W] Daily Work    |  +---------------------------+  +--------------------+  |
-|  [P] Weekly Plan   |  | Today's Action Objectives |  | Productivity Matrix|  |
-|                    |  | [x] Plan MERN goals       |  |     /---------\    |  |
-|  ----------------- |  | [x] Build Express backend |  |    /     67%   \   |  |
-|  User: Dawit pc    |  | [ ] Design CSS frontend   |  |    \  Productive /   |  |
-|  [D] Local DB OK   |  +---------------------------+  +--------------------+  |
-|                    |                                                         |
-|                    |  +---------------------------------------------------+  |
-|                    |  | Reflections & Key Learnings Journal               |  |
-|                    |  | "Completed major development steps today. The     |  |
-|                    |  |  custom dual-mode database worked flawlessly!"    |  |
-|                    |  +---------------------------------------------------+  |
-+-----------------------------------------------------------------------------+
-```
+![Productive Journey Dashboard](dashboard_preview.png)
 
 ---
 
