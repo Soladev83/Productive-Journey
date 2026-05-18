@@ -67,7 +67,7 @@ function WeeklyPlanner() {
   // Fetch all plans for this week (or general plans)
   const fetchPlans = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/plans');
+      const response = await fetch('/_/backend/api/plans');
       if (response.ok) {
         const data = await response.json();
         setPlans(data);
@@ -109,7 +109,7 @@ function WeeklyPlanner() {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/plans', {
+      const response = await fetch('/_/backend/api/plans', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -138,7 +138,7 @@ function WeeklyPlanner() {
   // Toggle plan completion state
   const handleTogglePlan = async (item) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/plans/${item._id}`, {
+      const response = await fetch(`/_/backend/api/plans/${item._id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -157,7 +157,7 @@ function WeeklyPlanner() {
   // Delete plan item
   const handleDeletePlan = async (id) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/plans/${id}`, {
+      const response = await fetch(`/_/backend/api/plans/${id}`, {
         method: 'DELETE'
       });
       if (response.ok) {

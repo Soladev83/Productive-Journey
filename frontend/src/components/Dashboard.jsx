@@ -26,7 +26,7 @@ function Dashboard({ selectedDate, setSelectedTab, setSelectedDate }) {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/logs/stats/summary');
+        const response = await fetch('/_/backend/api/logs/stats/summary');
         if (response.ok) {
           const data = await response.json();
           setStats(data);

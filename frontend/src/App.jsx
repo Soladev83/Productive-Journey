@@ -51,7 +51,7 @@ function App() {
   useEffect(() => {
     const checkApi = async () => {
       try {
-        const response = await fetch('http://localhost:5000/');
+        const response = await fetch('/_/backend/');
         if (response.ok) {
           const data = await response.json();
           setDbStatus({
