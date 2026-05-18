@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  LayoutDashboard, 
-  CheckSquare, 
-  Calendar, 
-  Sparkles, 
+import {
+  LayoutDashboard,
+  CheckSquare,
+  Calendar,
+  Sparkles,
   Database,
   CalendarDays
 } from 'lucide-react';
@@ -65,7 +65,7 @@ function App() {
         setDbStatus({ online: false, mode: 'Server Offline' });
       }
     };
-    
+
     checkApi();
     // Check again every 30 seconds
     const interval = setInterval(checkApi, 30000);
@@ -84,7 +84,7 @@ function App() {
         </div>
 
         <nav className="sidebar-nav">
-          <div 
+          <div
             className={`nav-item ${activeTab === 'dashboard' ? 'active' : ''}`}
             onClick={() => setActiveTab('dashboard')}
           >
@@ -92,7 +92,7 @@ function App() {
             <span>Dashboard</span>
           </div>
 
-          <div 
+          <div
             className={`nav-item ${activeTab === 'workspace' ? 'active' : ''}`}
             onClick={() => setActiveTab('workspace')}
           >
@@ -100,7 +100,7 @@ function App() {
             <span>Daily Workspace</span>
           </div>
 
-          <div 
+          <div
             className={`nav-item ${activeTab === 'planner' ? 'active' : ''}`}
             onClick={() => setActiveTab('planner')}
           >
@@ -113,7 +113,7 @@ function App() {
           <div className="sidebar-footer-info">
             <div className="user-avatar">D</div>
             <div className="user-detail">
-              <span className="user-name">Dawit pc</span>
+              <span className="user-name">Sola pc</span>
               <span className="user-tag">Productive User</span>
             </div>
           </div>
@@ -130,7 +130,7 @@ function App() {
         <header className="content-header">
           <div className="header-title-container">
             <h1 style={{ fontSize: '2.2rem', fontFamily: 'var(--font-display)', fontWeight: 800 }}>
-              {greeting}, Dawit!
+              {greeting}, Sola!
             </h1>
             <span className="header-subtitle">
               {activeTab === 'dashboard' && "Track your productivity trends and review reflections"}
@@ -147,15 +147,15 @@ function App() {
                 <span style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
                   {formatDateDisplay(selectedDate)}
                 </span>
-                <input 
-                  type="date" 
+                <input
+                  type="date"
                   value={selectedDate}
                   onChange={(e) => setSelectedDate(e.target.value)}
                   className="glass-input"
                   style={{ border: 'none', background: 'transparent', padding: '2px', cursor: 'pointer', width: '28px', color: 'transparent' }}
                 />
               </div>
-              <button 
+              <button
                 className="glass-btn"
                 onClick={() => setSelectedDate(getTodayString())}
               >
@@ -168,15 +168,15 @@ function App() {
         {/* 3. PAGE VIEW ROUTING */}
         <section className="page-view-content">
           {activeTab === 'dashboard' && (
-            <Dashboard 
-              selectedDate={selectedDate} 
+            <Dashboard
+              selectedDate={selectedDate}
               setSelectedTab={setActiveTab}
               setSelectedDate={setSelectedDate}
             />
           )}
           {activeTab === 'workspace' && (
-            <DailyWorkspace 
-              selectedDate={selectedDate} 
+            <DailyWorkspace
+              selectedDate={selectedDate}
             />
           )}
           {activeTab === 'planner' && (
