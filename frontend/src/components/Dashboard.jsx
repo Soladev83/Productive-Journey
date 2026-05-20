@@ -241,12 +241,11 @@ function Dashboard({ selectedDate, setSelectedTab, setSelectedDate }) {
           </h2>
           {renderSVGChart()}
           
-          <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px', background: 'hsla(0, 0%, 100%, 0.02)', borderRadius: '12px', border: 'var(--border-glass)' }}>
-            <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Ready to structure goals for today?</span>
+          <div className="dashboard-cta-banner">
+            <span className="dashboard-cta-text">Ready to structure goals for today?</span>
             <button 
-              className="glass-btn primary"
+              className="glass-btn primary dashboard-cta-btn"
               onClick={() => setSelectedTab('workspace')}
-              style={{ padding: '8px 14px', fontSize: '0.85rem' }}
             >
               <span>Daily Checklist</span>
               <ArrowRight size={14} />
