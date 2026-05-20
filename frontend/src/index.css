@@ -1081,6 +1081,8 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
   margin-bottom: 12px;
   border-bottom: 1px solid hsla(0, 0%, 100%, 0.04);
   padding-bottom: 8px;
@@ -1097,7 +1099,11 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--text-secondary);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
+}
+
+.journal-history-text + .journal-history-label {
+  margin-top: 14px;
 }
 
 .journal-history-text {
@@ -1105,6 +1111,9 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--text-primary);
   margin-bottom: 14px;
   line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .journal-history-learned {
@@ -1114,7 +1123,10 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 0 8px 8px 0;
   font-size: 0.88rem;
   color: var(--text-secondary);
-  line-height: 1.4;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 /* --- 9. RESPONSIVE DESIGN (MEDIA QUERIES) --- */
