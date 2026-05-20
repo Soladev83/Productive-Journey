@@ -757,6 +757,17 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 12px;
 }
 
+.planner-controls-header {
+  display: flex;
+  flex-direction: column;
+}
+
+.planner-controls-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
 .planner-week-title {
   font-size: 1.5rem;
   font-weight: 800;
@@ -1200,35 +1211,50 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 24px !important;
   }
 
-  /* Swipeable Kanban Board for Planner */
+  /* Stacked Vertical List for Planner on Mobile */
   .planner-controls {
     flex-direction: column !important;
-    align-items: flex-start !important;
+    align-items: stretch !important;
     gap: 16px !important;
   }
 
-  .planner-controls > div {
-    width: 100% !important;
+  .planner-controls-header {
+    text-align: center;
   }
 
-  .planner-controls div[style*="display: flex"] {
+  .planner-controls-actions {
+    display: flex !important;
+    flex-wrap: wrap !important;
     justify-content: space-between !important;
+    width: 100% !important;
+    gap: 10px !important;
+  }
+
+  .planner-controls-actions button {
+    flex: 1 1 calc(50% - 5px) !important;
+    justify-content: center !important;
+  }
+
+  .planner-controls-actions button.primary {
+    flex: 1 1 100% !important;
+    order: -1; /* visually position "Schedule Objective" first/top */
   }
 
   .planner-grid {
     display: flex !important;
-    flex-direction: row !important;
-    overflow-x: auto !important;
-    scroll-snap-type: x mandatory !important;
-    padding-bottom: 16px !important;
+    flex-direction: column !important;
+    overflow-x: hidden !important;
+    scroll-snap-type: none !important;
     gap: 16px !important;
     margin-top: 8px !important;
+    width: 100% !important;
   }
 
   .planner-day-column {
-    flex: 0 0 280px !important;
-    scroll-snap-align: start !important;
-    min-height: 400px !important;
+    width: 100% !important;
+    flex: none !important;
+    scroll-snap-align: none !important;
+    min-height: auto !important;
   }
 
   /* Optimize modal size */

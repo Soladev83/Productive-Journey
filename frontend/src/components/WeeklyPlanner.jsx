@@ -214,14 +214,14 @@ function WeeklyPlanner() {
     <div className="planner-view">
       {/* 1. WEEKLY CONTROLS */}
       <div className="planner-controls">
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div className="planner-controls-header">
           <span className="planner-week-title">Weekly Focus Schedule</span>
           <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
             Week ID: {weekId} ({weekDays[0].label} — {weekDays[6].label})
           </span>
         </div>
         
-        <div style={{ display: 'flex', gap: '12px' }}>
+        <div className="planner-controls-actions">
           <button className="glass-btn" onClick={handlePrevWeek}>&larr; Prev Week</button>
           <button 
             className="glass-btn primary"
