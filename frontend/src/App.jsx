@@ -130,7 +130,7 @@ function App() {
         {/* Dynamic Page Header */}
         <header className="content-header">
           <div className="header-title-container">
-            <h1 style={{ fontSize: '2.2rem', fontFamily: 'var(--font-display)', fontWeight: 800 }}>
+            <h1 className="header-title">
               {greeting}, Sola!
             </h1>
             <span className="header-subtitle">

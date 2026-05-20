@@ -254,6 +254,15 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--text-muted);
 }
 
+.header-title {
+  font-size: 2.2rem;
+  font-family: var(--font-display);
+  font-weight: 800;
+  background: linear-gradient(135deg, #ffffff 40%, var(--text-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 .date-controller {
   display: flex;
   align-items: center;
@@ -1098,62 +1107,212 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* --- 9. RESPONSIVE DESIGN (MEDIA QUERIES) --- */
-@media (max-width: 1100px) {
+
+/* Medium Devices (Tablets / Small Laptops) */
+@media (max-width: 1024px) {
   .dashboard-details-grid {
     grid-template-columns: 1fr;
+    gap: 20px;
   }
   .workspace-grid {
     grid-template-columns: 1fr;
+    gap: 20px;
   }
 }
 
-@media (max-width: 860px) {
+/* Mobile-First Adaptations (Screens < 768px) */
+@media (max-width: 768px) {
+  /* Bottom Navigation Bar instead of sidebar */
   .sidebar {
-    width: 80px;
-    padding: 24px 12px;
-    align-items: center;
+    width: 100% !important;
+    height: 68px !important;
+    flex-direction: row !important;
+    padding: 0 16px !important;
+    border-right: none !important;
+    border-top: var(--border-glass) !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    top: auto !important;
+    left: 0 !important;
+    z-index: 1000 !important;
+    justify-content: space-around !important;
+    align-items: center !important;
+    background: hsla(225, 24%, 6%, 0.9) !important; /* Sleek dark glassmorphic bottom nav */
+    box-shadow: 0 -8px 32px 0 rgba(0, 0, 0, 0.6) !important;
   }
-  .logo-text, .user-detail, .sidebar-footer {
-    display: none;
+
+  .sidebar-logo, .sidebar-footer {
+    display: none !important;
   }
-  .sidebar-logo {
-    margin-bottom: 36px;
-    padding: 0;
+
+  .sidebar-nav {
+    flex-direction: row !important;
+    width: 100% !important;
+    height: 100% !important;
+    justify-content: space-around !important;
+    align-items: center !important;
+    gap: 0 !important;
   }
+
   .nav-item {
-    justify-content: center;
-    padding: 12px;
-    border-radius: 12px;
-    width: 48px;
-    height: 48px;
+    flex-direction: column !important;
+    gap: 4px !important;
+    padding: 8px 12px !important;
+    font-size: 0.72rem !important;
+    font-weight: 500 !important;
+    width: 75px !important;
+    height: 100% !important;
+    justify-content: center !important;
+    align-items: center !important;
+    border-radius: 0 !important;
+    border: none !important;
+    background: transparent !important;
   }
+
   .nav-item span {
-    display: none;
+    display: block !important;
   }
+
+  .nav-item-icon {
+    width: 18px !important;
+    height: 18px !important;
+  }
+
+  .nav-item.active {
+    color: var(--accent-teal) !important;
+    border-top: 3px solid var(--accent-teal) !important;
+    border-left: none !important;
+    background: transparent !important;
+  }
+
+  /* Main Viewport spacing */
   .main-viewport {
-    margin-left: 80px;
-    padding: 28px 24px;
+    margin-left: 0 !important;
+    margin-bottom: 68px !important; /* space for bottom navigation bar */
+    padding: 24px 16px !important;
   }
+
+  /* Stacked Header */
   .content-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 14px !important;
+    margin-bottom: 24px !important;
+  }
+
+  /* Swipeable Kanban Board for Planner */
+  .planner-controls {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 16px !important;
+  }
+
+  .planner-controls > div {
+    width: 100% !important;
+  }
+
+  .planner-controls div[style*="display: flex"] {
+    justify-content: space-between !important;
+  }
+
+  .planner-grid {
+    display: flex !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    padding-bottom: 16px !important;
+    gap: 16px !important;
+    margin-top: 8px !important;
+  }
+
+  .planner-day-column {
+    flex: 0 0 280px !important;
+    scroll-snap-align: start !important;
+    min-height: 400px !important;
+  }
+
+  /* Optimize modal size */
+  .modal-content {
+    padding: 24px 20px !important;
+    border-radius: 16px !important;
+  }
+
+  .modal-actions {
+    width: 100% !important;
+    flex-direction: column-reverse !important;
+    gap: 10px !important;
+  }
+
+  .modal-actions button {
+    width: 100% !important;
+    justify-content: center !important;
+    margin: 0 !important;
   }
 }
 
+/* Small Screens (Phones, Screens < 480px) */
 @media (max-width: 480px) {
+  .header-title {
+    font-size: 1.65rem !important;
+  }
+
   .stats-cards-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
   }
-  .main-viewport {
-    padding: 20px 16px;
+
+  .stat-card {
+    padding: 16px 20px !important;
   }
-  .glass-btn {
-    padding: 8px 12px;
-    font-size: 0.8rem;
+
+  .stat-card-value {
+    font-size: 1.85rem !important;
   }
-  .glass-input {
-    padding: 8px 12px;
-    font-size: 0.8rem;
+
+  /* Date Controller spacing */
+  .date-controller {
+    width: 100% !important;
+    justify-content: space-between !important;
+  }
+
+  .date-controller .glass-panel {
+    flex-grow: 1 !important;
+    justify-content: center !important;
+  }
+
+  /* Task Creator responsive stacking */
+  .task-creator {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  .task-creator button {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  /* Journal section spacing */
+  .journal-panel {
+    padding: 20px 16px !important;
+    margin-top: 16px !important;
+  }
+
+  .journal-panel div[style*="display: flex"] {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 16px !important;
+  }
+
+  .journal-panel button {
+    width: 100% !important;
+  }
+
+  /* Chart spacing */
+  .chart-panel {
+    padding: 16px !important;
+  }
+
+  .svg-chart-container {
+    height: 180px !important;
   }
 }
