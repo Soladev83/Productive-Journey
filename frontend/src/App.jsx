@@ -10,6 +10,7 @@ import {
 import Dashboard from './components/Dashboard';
 import DailyWorkspace from './components/DailyWorkspace';
 import WeeklyPlanner from './components/WeeklyPlanner';
+import { API_URL } from './config';
 
 function App() {
   const [activeTab, setActiveTab] = useState('workspace'); // default to workspace daily todo
@@ -51,7 +52,7 @@ function App() {
   useEffect(() => {
     const checkApi = async () => {
       try {
-        const response = await fetch('/_/backend/');
+        const response = await fetch(`${API_URL}`);
         if (response.ok) {
           const data = await response.json();
           setDbStatus({

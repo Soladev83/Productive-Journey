@@ -9,6 +9,7 @@ import {
   Sparkles,
   ChevronRight
 } from 'lucide-react';
+import { API_URL } from '../config';
 
 function Dashboard({ selectedDate, setSelectedTab, setSelectedDate }) {
   const [stats, setStats] = useState({
@@ -26,7 +27,7 @@ function Dashboard({ selectedDate, setSelectedTab, setSelectedDate }) {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await fetch('/api/logs/stats/summary');
+        const response = await fetch(`${API_URL}/api/logs/stats/summary`);
         if (response.ok) {
           const data = await response.json();
           setStats(data);

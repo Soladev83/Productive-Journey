@@ -8,6 +8,7 @@ import {
   ClipboardList,
   Smile
 } from 'lucide-react';
+import { API_URL } from '../config';
 
 function DailyWorkspace({ selectedDate }) {
   const [tasks, setTasks] = useState([]);
@@ -22,7 +23,7 @@ function DailyWorkspace({ selectedDate }) {
   useEffect(() => {
     const fetchDailyLog = async () => {
       try {
-        const response = await fetch(`/api/logs/${selectedDate}`);
+        const response = await fetch(`${API_URL}/api/logs/${selectedDate}`);
         if (response.ok) {
           const data = await response.json();
           setTasks(data.tasks || []);
@@ -102,7 +103,7 @@ function DailyWorkspace({ selectedDate }) {
     }
 
     try {
-      const response = await fetch(`/api/logs/${selectedDate}`, {
+      const response = await fetch(`${API_URL}/api/logs/${selectedDate}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

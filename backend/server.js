@@ -14,6 +14,7 @@ const PORT = process.env.PORT || 5000;
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:3000',
+  'https://productive-journey.vercel.app',
   'https://productive-journey-soladev83.vercel.app',
   'https://productive-journey-Soladev83.vercel.app'
 ];
