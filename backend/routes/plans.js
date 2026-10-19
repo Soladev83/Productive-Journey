@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
 
 // POST create a new planned task/goal
 router.post('/', async (req, res) => {
-  const { date, title, notes, category, completed } = req.body;
+  const { date, title, notes, category, completed, timeBlock, startTime, endTime } = req.body;
   if (!date || !title) {
     return res.status(400).json({ error: 'Date and Title are required' });
   }
@@ -32,7 +32,10 @@ router.post('/', async (req, res) => {
       title,
       notes: notes || '',
       category: category || 'work',
-      completed: completed || false
+      completed: completed || false,
+      timeBlock: timeBlock || 'morning',
+      startTime: startTime || '',
+      endTime: endTime || ''
     });
     res.status(201).json(newPlan);
   } catch (error) {
@@ -43,12 +46,12 @@ router.post('/', async (req, res) => {
 // PUT update an existing plan task
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
-  const { title, notes, category, completed, date } = req.body;
+  const { title, notes, category, completed, date, timeBlock, startTime, endTime } = req.body;
   
   try {
     const updatedPlan = await Plan.findByIdAndUpdate(
       id,
-      { title, notes, category, completed, date },
+      { title, notes, category, completed, date, timeBlock, startTime, endTime },
       { new: true }
     );
     if (!updatedPlan) {

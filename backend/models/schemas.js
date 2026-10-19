@@ -14,7 +14,11 @@ const DayLogSchema = new mongoose.Schema({
     {
       id: { type: String, required: true },
       text: { type: String, required: true },
-      completed: { type: Boolean, default: false }
+      completed: { type: Boolean, default: false },
+      // Optional: links a task back to a scheduled plan
+      planId: { type: String, default: null },
+      timeBlock: { type: String, default: null }, // morning/afternoon/evening/night
+      startTime: { type: String, default: null }  // HH:MM
     }
   ],
   productivityPercent: { type: Number, default: 0 },
@@ -29,7 +33,11 @@ const PlanSchema = new mongoose.Schema({
   title: { type: String, required: true },
   notes: { type: String, default: '' },
   category: { type: String, default: 'work' }, // work, personal, health, learning, other
-  completed: { type: Boolean, default: false }
+  completed: { type: Boolean, default: false },
+  // Time scheduling fields
+  timeBlock: { type: String, enum: ['morning', 'afternoon', 'evening', 'night'], default: 'morning' },
+  startTime: { type: String, default: '' }, // HH:MM format
+  endTime: { type: String, default: '' }    // HH:MM format
 }, { timestamps: true });
 
 // Prevent mongoose model compilation errors during dev reload
