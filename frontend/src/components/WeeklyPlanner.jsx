@@ -389,7 +389,7 @@ function WeeklyPlanner() {
               </button>
             </div>
 
-            <form onSubmit={handleSubmitPlan} className="modal-form">
+            <form id="plan-form" onSubmit={handleSubmitPlan} className="modal-form">
               {/* Day selection */}
               <div className="modal-field">
                 <label>Target Day of Focus</label>
@@ -498,16 +498,16 @@ function WeeklyPlanner() {
                   })}
                 </div>
               </div>
-
-              {/* Actions */}
-              <div className="modal-actions">
-                <button type="button" className="glass-btn" onClick={closeModal}>Cancel</button>
-                <button type="submit" className="glass-btn primary">
-                  <Check size={16} />
-                  <span>{isEditMode ? 'Save Changes' : 'Confirm Schedule'}</span>
-                </button>
-              </div>
             </form>
+
+            {/* Sticky footer — outside the scrollable form */}
+            <div className="modal-actions">
+              <button type="button" className="glass-btn" onClick={closeModal}>Cancel</button>
+              <button type="submit" form="plan-form" className="glass-btn primary">
+                <Check size={16} />
+                <span>{isEditMode ? 'Save Changes' : 'Confirm Schedule'}</span>
+              </button>
+            </div>
           </div>
         </div>
       )}
