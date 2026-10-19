@@ -12,7 +12,8 @@ import {
   Sun,
   Sunset,
   Moon,
-  Coffee
+  Coffee,
+  Pencil
 } from 'lucide-react';
 import { API_URL } from '../config';
 
@@ -28,8 +29,9 @@ function WeeklyPlanner() {
   const [plans, setPlans] = useState([]);
   const [currentWeekStart, setCurrentWeekStart] = useState(getMondayOfCurrentWeek(new Date()));
   const [showAddModal, setShowAddModal] = useState(false);
-  
-  // Modal Form States
+  const [editingPlan, setEditingPlan] = useState(null); // null = create mode, object = edit mode
+
+  // Shared modal form states
   const [targetDay, setTargetDay] = useState('Monday');
   const [taskTitle, setTaskTitle] = useState('');
   const [taskNotes, setTaskNotes] = useState('');
@@ -38,7 +40,6 @@ function WeeklyPlanner() {
   const [taskStartTime, setTaskStartTime] = useState('');
   const [taskEndTime, setTaskEndTime] = useState('');
 
-  // Get Monday of the week for a given date
   function getMondayOfCurrentWeek(d) {
     const date = new Date(d);
     const day = date.getDay();
@@ -48,7 +49,6 @@ function WeeklyPlanner() {
     return monday;
   }
 
-  // Format date to YYYY-MM-DD
   function formatDateKey(dateObj) {
     const year = dateObj.getFullYear();
     const month = String(dateObj.getMonth() + 1).padStart(2, '0');
@@ -56,7 +56,6 @@ function WeeklyPlanner() {
     return `${year}-${month}-${day}`;
   }
 
-  // Generate the 7 days of the week starting from currentWeekStart
   const weekDays = Array.from({ length: 7 }).map((_, idx) => {
     const dayDate = new Date(currentWeekStart);
     dayDate.setDate(currentWeekStart.getDate() + idx);
@@ -69,7 +68,6 @@ function WeeklyPlanner() {
     };
   });
 
-  // Calculate standard Week ID (e.g., "2026-W21")
   const getWeekId = () => {
     const d = new Date(currentWeekStart);
     d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
@@ -80,31 +78,23 @@ function WeeklyPlanner() {
 
   const weekId = getWeekId();
 
-  // Format HH:MM to 12h display
   const formatTime12h = (t) => {
     if (!t) return '';
     const [h, m] = t.split(':').map(Number);
     const suffix = h >= 12 ? 'PM' : 'AM';
-    const hour = h % 12 || 12;
-    return `${hour}:${String(m).padStart(2, '0')} ${suffix}`;
+    return `${h % 12 || 12}:${String(m).padStart(2, '0')} ${suffix}`;
   };
 
-  // Fetch all plans
   const fetchPlans = async () => {
     try {
       const response = await fetch(`${API_URL}/api/plans`);
-      if (response.ok) {
-        const data = await response.json();
-        setPlans(data);
-      }
+      if (response.ok) setPlans(await response.json());
     } catch (error) {
       console.error('Error fetching weekly plans:', error);
     }
   };
 
-  useEffect(() => {
-    fetchPlans();
-  }, [currentWeekStart]);
+  useEffect(() => { fetchPlans(); }, [currentWeekStart]);
 
   const handlePrevWeek = () => {
     const prev = new Date(currentWeekStart);
@@ -118,47 +108,96 @@ function WeeklyPlanner() {
     setCurrentWeekStart(next);
   };
 
-  // Submit new plan
+  // Open modal in CREATE mode
+  const openCreateModal = (day = 'Monday') => {
+    setEditingPlan(null);
+    setTargetDay(day);
+    setTaskTitle('');
+    setTaskNotes('');
+    setTaskCategory('work');
+    setTaskTimeBlock('morning');
+    setTaskStartTime('');
+    setTaskEndTime('');
+    setShowAddModal(true);
+  };
+
+  // Open modal in EDIT mode — pre-fill all fields from existing plan
+  const openEditModal = (plan) => {
+    setEditingPlan(plan);
+
+    // Determine targetDay from plan.date
+    const matchedDay = weekDays.find(d => d.dateKey === plan.date);
+    if (matchedDay) {
+      setTargetDay(matchedDay.name);
+    } else {
+      // It's a weekly priority
+      setTargetDay('weekly-goals');
+    }
+
+    setTaskTitle(plan.title || '');
+    setTaskNotes(plan.notes || '');
+    setTaskCategory(plan.category || 'work');
+    setTaskTimeBlock(plan.timeBlock || 'morning');
+    setTaskStartTime(plan.startTime || '');
+    setTaskEndTime(plan.endTime || '');
+    setShowAddModal(true);
+  };
+
+  const closeModal = () => {
+    setShowAddModal(false);
+    setEditingPlan(null);
+  };
+
+  // Resolve the dateKey from the targetDay selector
+  const resolveDateKey = () => {
+    if (targetDay === 'weekly-goals') return weekId;
+    const match = weekDays.find(d => d.name === targetDay);
+    return match ? match.dateKey : weekId;
+  };
+
+  // Handle both create and update from the single modal form
   const handleSubmitPlan = async (e) => {
     e.preventDefault();
     if (!taskTitle.trim()) return;
 
-    let dateKey = 'weekly-goals';
-    if (targetDay !== 'weekly-goals') {
-      const match = weekDays.find(d => d.name === targetDay);
-      if (match) dateKey = match.dateKey;
-    } else {
-      dateKey = weekId;
-    }
+    const isWeeklyGoal = targetDay === 'weekly-goals';
+    const dateKey = resolveDateKey();
+
+    const payload = {
+      date: dateKey,
+      title: taskTitle.trim(),
+      notes: taskNotes.trim(),
+      category: taskCategory,
+      timeBlock: isWeeklyGoal ? 'morning' : taskTimeBlock,
+      startTime: isWeeklyGoal ? '' : taskStartTime,
+      endTime: isWeeklyGoal ? '' : taskEndTime,
+    };
 
     try {
-      const response = await fetch(`${API_URL}/api/plans`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          date: dateKey,
-          title: taskTitle.trim(),
-          notes: taskNotes.trim(),
-          category: taskCategory,
-          completed: false,
-          timeBlock: targetDay !== 'weekly-goals' ? taskTimeBlock : 'morning',
-          startTime: targetDay !== 'weekly-goals' ? taskStartTime : '',
-          endTime: targetDay !== 'weekly-goals' ? taskEndTime : ''
-        })
-      });
+      let response;
+
+      if (editingPlan) {
+        // UPDATE existing plan via PUT
+        response = await fetch(`${API_URL}/api/plans/${editingPlan._id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...editingPlan, ...payload })
+        });
+      } else {
+        // CREATE new plan via POST
+        response = await fetch(`${API_URL}/api/plans`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...payload, completed: false })
+        });
+      }
 
       if (response.ok) {
         fetchPlans();
-        setTaskTitle('');
-        setTaskNotes('');
-        setTaskCategory('work');
-        setTaskTimeBlock('morning');
-        setTaskStartTime('');
-        setTaskEndTime('');
-        setShowAddModal(false);
+        closeModal();
       }
     } catch (error) {
-      console.error('Error saving plan item:', error);
+      console.error('Error saving plan:', error);
     }
   };
 
@@ -184,15 +223,13 @@ function WeeklyPlanner() {
     }
   };
 
-  // Filter and sort plans for a date key — sorted by time block order then startTime
   const getPlansForDateKey = (key) => {
     const blockOrder = { morning: 0, afternoon: 1, evening: 2, night: 3 };
     return plans
       .filter(plan => plan.date === key)
       .sort((a, b) => {
-        const blockDiff = (blockOrder[a.timeBlock] ?? 0) - (blockOrder[b.timeBlock] ?? 0);
-        if (blockDiff !== 0) return blockDiff;
-        return (a.startTime || '').localeCompare(b.startTime || '');
+        const bd = (blockOrder[a.timeBlock] ?? 0) - (blockOrder[b.timeBlock] ?? 0);
+        return bd !== 0 ? bd : (a.startTime || '').localeCompare(b.startTime || '');
       });
   };
 
@@ -206,14 +243,13 @@ function WeeklyPlanner() {
     }
   };
 
-  // Render a single plan card (shared between weekly col and day cols)
   const renderPlanCard = (plan) => {
     const styles = getCategoryStyles(plan.category);
     const block = TIME_BLOCKS.find(b => b.id === plan.timeBlock);
     const hasTime = plan.startTime || plan.endTime;
     return (
-      <div 
-        key={plan._id} 
+      <div
+        key={plan._id}
         className={`planner-task-card ${plan.completed ? 'completed' : ''}`}
         style={{ '--planner-card-accent': styles.color }}
       >
@@ -224,7 +260,6 @@ function WeeklyPlanner() {
           </div>
         </div>
 
-        {/* Time badge row */}
         {block && (
           <div className="planner-card-time-row">
             <span className="planner-card-time-badge" style={{ '--block-color': block.color, '--block-glow': block.glow }}>
@@ -245,17 +280,33 @@ function WeeklyPlanner() {
         )}
 
         {plan.notes && <p className="planner-card-notes">{plan.notes}</p>}
+
         <div className="planner-card-footer">
           <span className="planner-card-tag" style={{ '--tag-bg': styles.bg, '--tag-color': styles.color }}>
             {plan.category}
           </span>
-          <button className="planner-card-delete" onClick={() => handleDeletePlan(plan._id)}>
-            <Trash2 size={12} />
-          </button>
+          <div className="planner-card-actions">
+            <button
+              className="planner-card-edit"
+              onClick={(e) => { e.stopPropagation(); openEditModal(plan); }}
+              title="Edit schedule"
+            >
+              <Pencil size={12} />
+            </button>
+            <button
+              className="planner-card-delete"
+              onClick={(e) => { e.stopPropagation(); handleDeletePlan(plan._id); }}
+              title="Delete"
+            >
+              <Trash2 size={12} />
+            </button>
+          </div>
         </div>
       </div>
     );
   };
+
+  const isEditMode = !!editingPlan;
 
   return (
     <div className="planner-view">
@@ -269,7 +320,7 @@ function WeeklyPlanner() {
         </div>
         <div className="planner-controls-actions">
           <button className="glass-btn" onClick={handlePrevWeek}>&larr; Prev Week</button>
-          <button className="glass-btn primary" onClick={() => { setTargetDay('weekly-goals'); setShowAddModal(true); }}>
+          <button className="glass-btn primary" onClick={() => openCreateModal('weekly-goals')}>
             <Plus size={16} />
             <span>Schedule Objective</span>
           </button>
@@ -283,7 +334,7 @@ function WeeklyPlanner() {
         <div className="glass-panel planner-day-column" style={{ borderStyle: 'dashed', borderColor: 'hsla(0,0%,100%,0.15)' }}>
           <div className="planner-day-header">
             <span className="planner-day-name" style={{ color: 'var(--accent-purple)' }}>Weekly Priorities</span>
-            <button onClick={() => { setTargetDay('weekly-goals'); setShowAddModal(true); }} className="planner-add-task-btn">
+            <button onClick={() => openCreateModal('weekly-goals')} className="planner-add-task-btn">
               <Plus size={16} />
             </button>
           </div>
@@ -307,7 +358,7 @@ function WeeklyPlanner() {
                 <span className="planner-day-name">{day.name}</span>
                 <span className="planner-day-date">{day.label}</span>
               </div>
-              <button onClick={() => { setTargetDay(day.name); setShowAddModal(true); }} className="planner-add-task-btn">
+              <button onClick={() => openCreateModal(day.name)} className="planner-add-task-btn">
                 <Plus size={16} />
               </button>
             </div>
@@ -325,13 +376,15 @@ function WeeklyPlanner() {
         ))}
       </div>
 
-      {/* 3. POPUP MODAL FOR PLANNING ITEMS CREATION */}
+      {/* 3. CREATE / EDIT MODAL */}
       {showAddModal && (
-        <div className="modal-overlay" onClick={() => setShowAddModal(false)}>
+        <div className="modal-overlay" onClick={closeModal}>
           <div className="glass-panel modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h2 style={{ fontSize: '1.4rem', fontWeight: 800 }}>Schedule Target Objective</h2>
-              <button className="modal-close-btn" onClick={() => setShowAddModal(false)}>
+              <h2 style={{ fontSize: '1.4rem', fontWeight: 800 }}>
+                {isEditMode ? '✏️ Edit Schedule' : 'Schedule Target Objective'}
+              </h2>
+              <button className="modal-close-btn" onClick={closeModal}>
                 <X size={20} />
               </button>
             </div>
@@ -353,7 +406,7 @@ function WeeklyPlanner() {
                 </select>
               </div>
 
-              {/* Title input */}
+              {/* Title */}
               <div className="modal-field">
                 <label>Goal Objective Title</label>
                 <input
@@ -377,7 +430,9 @@ function WeeklyPlanner() {
                           key={block.id}
                           onClick={() => setTaskTimeBlock(block.id)}
                           className={`time-block-radio ${taskTimeBlock === block.id ? 'active' : ''}`}
-                          style={taskTimeBlock === block.id ? { borderColor: block.color, '--block-color': block.color } : { '--block-color': block.color }}
+                          style={taskTimeBlock === block.id
+                            ? { borderColor: block.color, '--block-color': block.color }
+                            : { '--block-color': block.color }}
                         >
                           <block.icon size={14} style={{ color: block.color }} />
                           <span style={{ color: taskTimeBlock === block.id ? '#fff' : block.color }}>{block.label}</span>
@@ -410,7 +465,7 @@ function WeeklyPlanner() {
                 </>
               )}
 
-              {/* Notes input */}
+              {/* Notes */}
               <div className="modal-field">
                 <label>Notes / Specific Instructions (Optional)</label>
                 <textarea
@@ -422,7 +477,7 @@ function WeeklyPlanner() {
                 />
               </div>
 
-              {/* Category radio selectors */}
+              {/* Category */}
               <div className="modal-field">
                 <label>Activity Category Tag</label>
                 <div className="category-options">
@@ -444,12 +499,12 @@ function WeeklyPlanner() {
                 </div>
               </div>
 
-              {/* Action buttons */}
+              {/* Actions */}
               <div className="modal-actions">
-                <button type="button" className="glass-btn" onClick={() => setShowAddModal(false)}>Cancel</button>
+                <button type="button" className="glass-btn" onClick={closeModal}>Cancel</button>
                 <button type="submit" className="glass-btn primary">
                   <Check size={16} />
-                  <span>Confirm Schedule</span>
+                  <span>{isEditMode ? 'Save Changes' : 'Confirm Schedule'}</span>
                 </button>
               </div>
             </form>

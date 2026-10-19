@@ -1267,7 +1267,15 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--tag-color, var(--accent-purple));
 }
 
-.planner-card-delete {
+/* Card action group — edit + delete sit together */
+.planner-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.planner-card-delete,
+.planner-card-edit {
   background: none;
   border: none;
   cursor: pointer;
@@ -1276,14 +1284,23 @@ h1, h2, h3, h4, h5, h6 {
   transition: var(--transition-fast);
   display: flex;
   align-items: center;
+  padding: 3px;
+  border-radius: 5px;
 }
 
-.planner-task-card:hover .planner-card-delete {
+.planner-task-card:hover .planner-card-delete,
+.planner-task-card:hover .planner-card-edit {
   opacity: 1;
 }
 
 .planner-card-delete:hover {
   color: var(--accent-coral);
+  background: hsla(12, 88%, 59%, 0.1);
+}
+
+.planner-card-edit:hover {
+  color: var(--accent-teal);
+  background: hsla(182, 85%, 46%, 0.1);
 }
 
 /* Modal Overlay for planning items creation */
